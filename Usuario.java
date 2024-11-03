@@ -1,7 +1,8 @@
 public abstract class Usuario implements Pessoa {
     protected String nome;
     protected String documento;
-
+    protected String telefone;
+    
     @Override
     public String getNome() {
         return nome;
@@ -13,12 +14,12 @@ public abstract class Usuario implements Pessoa {
     }
 
     @Override
-    public String getDocumento() {
-        return documento;
+    public String getTelefone() {
+        return telefone;
     }
 
     @Override
-    public void setDocumento(String documento) {
-        this.documento = documento;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

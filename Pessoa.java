@@ -1,6 +1,6 @@
 public interface Pessoa {
     String getNome();
-    String getDocumento();
+    String getTelefone();
     void setNome(String nome);
-    void setDocumento(String documento);
+    void setTelefone(String telefone);
 }

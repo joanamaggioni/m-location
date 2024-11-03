@@ -4,74 +4,90 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("=== Cadastro do Cliente ===");
-        System.out.print("Nome do cliente: ");
-        String nomeCliente = scanner.nextLine();
+        Funcionario funcionario = null;
 
-        System.out.print("Documento do cliente (CPF): ");
-        String documentoCliente = scanner.nextLine();
+        while (true) {
+            System.out.println("\n=== Sistema de Reserva de Quartos ===");
+            System.out.print("Digite seu nome: ");
+            String nome = scanner.nextLine();
 
-        System.out.print("Telefone do cliente: ");
-        String telefoneCliente = scanner.nextLine();
-
-        System.out.print("Email do cliente: ");
-        String emailCliente = scanner.nextLine();
-
-        Cliente cliente = new Cliente(nomeCliente, documentoCliente, telefoneCliente, emailCliente);
-
-        System.out.println("\n=== Cadastro do Funcionario ===");
-        System.out.print("Nome do funcionario: ");
-        String nomeFuncionario = scanner.nextLine();
-
-        System.out.print("Documento do funcionario (CPF): ");
-        String documentoFuncionario = scanner.nextLine();
-
-        System.out.print("Cargo do funcionario: ");
-        String cargoFuncionario = scanner.nextLine();
-
-        System.out.print("Matrícula do funcionario: ");
-        int matriculaFuncionario = scanner.nextInt();
-        scanner.nextLine(); // Consumir nova linha após int
-
-        Funcionario funcionario = new Funcionario(nomeFuncionario, documentoFuncionario, cargoFuncionario, matriculaFuncionario);
-
-        System.out.println("\n=== Cadastro do Quarto ===");
-        System.out.print("Numero do quarto: ");
-        int numeroQuarto = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Tipo do quarto: ");
-        String tipoQuarto = scanner.nextLine();
-
-        Quarto quarto = new Quarto(numeroQuarto, tipoQuarto);
-
-        System.out.println("\n=== Acoes ===");
-        System.out.println("1. Realizar reserva do cliente");
-        System.out.println("2. Registrar entrada do funcionario");
-        System.out.println("3. Verificar disponibilidade do quarto");
-        System.out.println("Escolha uma opcao (1-3): ");
-        int opcao = scanner.nextInt();
-
-        switch (opcao) {
-            case 1:
-                cliente.realizarReserva();
-                break;
-            case 2:
-                funcionario.registrarEntrada();
-                break;
-            case 3:
-                if (quarto.verificarDisponibilidade()) {
-                    System.out.println("Quarto disponivel!");
-                    quarto.reservar();
-                } else {
-                    System.out.println("Quarto indisponivel.");
-                }
-                break;
-            default:
-                System.out.println("Opção invalida.");
-                break;
+            funcionario = new Funcionario(nome);
+            System.out.println("Login bem-sucedido como: " + funcionario.getNome());
+            break; 
         }
 
-        scanner.close();
+        Quarto[] quartos = new Quarto[5];
+        for (int i = 0; i < quartos.length; i++) {
+            TipoQuarto tipo = TipoQuarto.values()[i % TipoQuarto.values().length];
+            quartos[i] = new Quarto(i + 1, tipo, 100 + (i * 50), "Acessórios para " + tipo);
+        }
+
+        while (true) {
+            System.out.println("\n=== Ações ===");
+            System.out.println("1. Realizar reserva de quarto");
+            System.out.println("2. Verificar disponibilidade do quarto");
+            System.out.println("3. Cancelar reserva");
+            System.out.println("4. Sair");
+            System.out.print("Escolha uma opção (1-4): ");
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite o nome do cliente para reserva: ");
+                    String nomeClienteReserva = scanner.nextLine();
+
+                    System.out.println("======= Escolha o número do quarto que deseja reservar: =======");
+
+                    for (Quarto quarto : quartos) {
+                        System.out.println(quarto.getNumero() + ". Tipo: " + quarto.getTipo() + ", Preço: R$ " + quarto.getPreco());
+                    }
+                    int numeroQuartoEscolhaReserva = scanner.nextInt();
+                    scanner.nextLine(); 
+                    Quarto quartoEscolhidoReserva = quartos[numeroQuartoEscolhaReserva - 1];
+                    quartoEscolhidoReserva.reservar(nomeClienteReserva);
+                    break;
+                case 2:
+                    System.out.println("\n=== Verificar Disponibilidade ===");
+                    System.out.println("Escolha o número do quarto que deseja verificar:");
+                    for (Quarto quarto : quartos) {
+                        System.out.println(quarto.getNumero() + ". Tipo: " + quarto.getTipo());
+                    }
+                    int numeroQuartoEscolha = scanner.nextInt();
+                    scanner.nextLine(); 
+                    Quarto quartoEscolhido = quartos[numeroQuartoEscolha - 1];
+
+                    if (quartoEscolhido.verificarDisponibilidade()) {
+                        System.out.println("Quarto " + quartoEscolhido.getNumero() + " disponível!");
+                    } else {
+                        System.out.println("Quarto " + quartoEscolhido.getNumero() + " indisponível.");
+                    }
+                    break;
+                case 3:
+                    System.out.println("=== Escolha o número do quarto que deseja cancelar a reserva: ===");
+                    for (Quarto quarto : quartos) {
+                        System.out.println(quarto.getNumero() + ". Tipo: " + quarto.getTipo() + ", Reservado: " + (quarto.verificarDisponibilidade() ? "Não" : "Sim"));
+                    }
+                    int numeroQuartoEscolhaCancelamento = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Quarto quartoEscolhidoCancelamento = quartos[numeroQuartoEscolhaCancelamento - 1];
+
+                    if (!quartoEscolhidoCancelamento.verificarDisponibilidade()) {
+                        quartoEscolhidoCancelamento.cancelarReserva();
+                        System.out.println("Reserva do quarto " + quartoEscolhidoCancelamento.getNumero() + " cancelada com sucesso!");
+                    } else {
+                        System.out.println("Quarto " + quartoEscolhidoCancelamento.getNumero() + " não está reservado.");
+                    }
+                    break;
+                case 4:
+                    System.out.println("Saindo do sistema...");
+                    scanner.close();
+                    return; 
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+            }
+        }
     }
 }

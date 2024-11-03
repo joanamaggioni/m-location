@@ -1,28 +1,16 @@
-public class Cliente extends Usuario { // uso de heranca 
-    private String telefone;
-    private String email;
+public class Cliente extends Usuario {
+    private String telefoneCliente;
 
-    public Cliente(String nome, String documento, String telefone, String email) {
+    public Cliente(String nome, String telefoneCliente) {
         this.nome = nome;
-        this.documento = documento;
-        this.telefone = telefone;
-        this.email = email;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getTelefoneCliente() {
+        return telefoneCliente;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setTelefoneCliente(String telefoneCliente) {
+        this.telefoneCliente = telefoneCliente;
     }
 
     public void realizarReserva() {

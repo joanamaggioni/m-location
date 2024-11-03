@@ -1,29 +1,74 @@
-public class Quarto {
-    private int numeroQuarto;
-    private String tipoQuarto;
-    private boolean disponivel;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Quarto(int numeroQuarto, String tipoQuarto) {
-        this.numeroQuarto = numeroQuarto;
-        this.tipoQuarto = tipoQuarto;
+public class Quarto {
+    private int numero;
+    private TipoQuarto tipo;
+    private double preco;
+    private boolean disponivel;
+    private String acessorios;
+    private String nomeCliente;
+
+    public Quarto(int numero, TipoQuarto tipo, double preco, String acessorios) {
+        this.numero = numero;
+        this.tipo = tipo;
+        this.preco = preco;
+        this.acessorios = acessorios;
         this.disponivel = true;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public TipoQuarto getTipo() {
+        return tipo;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    public void getAcessorios() {
+        System.out.println(acessorios);
+    }
+
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
     }
 
     public boolean verificarDisponibilidade() {
         return disponivel;
     }
 
-    public void reservar() {
+    public void reservar(String nomeCliente) {
         if (disponivel) {
+            this.nomeCliente = nomeCliente; 
             disponivel = false;
-            System.out.println("Quarto " + numeroQuarto + " reservado.");
+
+            LocalDateTime agora = LocalDateTime.now();
+            LocalDateTime horaFim = agora.plusHours(2);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            System.out.println("A reserva do quarto " + tipo + " com o valor de R$ " + preco +
+                    ", está disponível a partir das " + agora.format(formatter) + " até as " +
+                    horaFim.format(formatter) + ", reserva criada em nome de " + nomeCliente + ".");
+
         } else {
-            System.out.println("Quarto " + numeroQuarto + " não está disponível.");
+            System.out.println("O quarto " + numero + " já está reservado.");
         }
     }
 
-    public void liberar() {
-        disponivel = true;
-        System.out.println("Quarto " + numeroQuarto + " liberado.");
+    public boolean cancelarReserva() {
+        if (!disponivel) {
+            disponivel = true;
+            this.nomeCliente = null; 
+            return true;
+        }
+        return false;
     }
 }
