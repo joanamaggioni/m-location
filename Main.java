@@ -5,6 +5,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         Funcionario funcionario = null;
+        Caixa caixa = new Caixa();
 
         while (true) {
             System.out.println("\n=== Sistema de Reserva de Quartos ===");
@@ -27,8 +28,9 @@ public class Main {
             System.out.println("1. Realizar reserva de quarto");
             System.out.println("2. Verificar disponibilidade do quarto");
             System.out.println("3. Cancelar reserva");
-            System.out.println("4. Sair");
-            System.out.print("Escolha uma opção (1-4): ");
+            System.out.println("4. Receber");
+            System.out.println("5. Sair");
+            System.out.print("Escolha uma opção (1-5): ");
             int opcao = scanner.nextInt();
             scanner.nextLine();
 
@@ -81,6 +83,16 @@ public class Main {
                     }
                     break;
                 case 4:
+                    System.out.println("Qual Quarto sera pago: ");
+                    for (Quarto quarto : quartos) {
+                        System.out.println(quarto.getNumero() + ". Tipo: " + quarto.getTipo());
+                    }
+                    int numeroQuartoReceber = scanner.nextInt();
+                    scanner.nextLine(); 
+                    Quarto quartoReceber = quartos[numeroQuartoReceber - 1];
+                    caixa.receber(quartoReceber, funcionario);
+                    break;
+                case 5:
                     System.out.println("Saindo do sistema...");
                     scanner.close();
                     return; 
